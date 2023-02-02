@@ -17,7 +17,7 @@ import CardBackground from '../../assets/images/visa_card.png';
 import { BoldText, NormalText } from '../components/CustomText';
 import Operations from '../components/Operations';
 import TransactionsList from '../components/TransactionsList';
-import PagerView from 'react-native-pager-view';
+// import PagerView from 'react-native-pager-view';
 
 const operations = [
     {

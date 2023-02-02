@@ -1,7 +1,7 @@
 import { ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { palette } from '../themes/palette';
-import PagerView from 'react-native-pager-view';
+// import PagerView from 'react-native-pager-view';
 import { SvgIcon } from '../../assets/SvgIcon';
 import { NormalText } from '../components/CustomText';
 import Spacer from '../components/Spacer';
@@ -10,7 +10,7 @@ import CardBackground from '../../assets/images/visa_card.png';
 const Home = () => {
     return (
         <SafeAreaView style={{ backgroundColor: palette.white, flex: 1 }}>
-            <PagerView style={{ height: 160, justifyContent: 'center' }} initialPage={0} offscreenPageLimit={1}>
+            {/* <PagerView style={{ height: 160, justifyContent: 'center' }} initialPage={0} offscreenPageLimit={1}>
                 <View key="1">
                     <ImageBackground
                         source={CardBackground}
@@ -91,7 +91,7 @@ const Home = () => {
                         </View>
                     </ImageBackground>
                 </View>
-            </PagerView>
+            </PagerView> */}
             <Text>Home</Text>
         </SafeAreaView>
     )
