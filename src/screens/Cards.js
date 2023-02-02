@@ -1,5 +1,15 @@
-import { FlatList, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import {
+    Dimensions,
+    FlatList,
+    ImageBackground,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity, 
+    View
+} from 'react-native';
+import React, { useRef, useState } from 'react';
 import { palette } from '../themes/palette';
 import { SvgIcon } from '../../assets/SvgIcon';
 import Spacer from '../components/Spacer';
@@ -7,6 +17,7 @@ import CardBackground from '../../assets/images/visa_card.png';
 import { BoldText, NormalText } from '../components/CustomText';
 import Operations from '../components/Operations';
 import TransactionsList from '../components/TransactionsList';
+import PagerView from 'react-native-pager-view';
 
 const operations = [
     {
@@ -49,14 +60,32 @@ const transactions = [
         time: '04: 20 PM',
         amount: '-$ 80.99'
     },
-]
+];
+
+const { width, height } = Dimensions.get('window');
+
+const slides = [
+    {
+        color: "#3CBAF0"
+    },
+    {
+        color: "rgba(255, 168, 135, 0.91)"
+    }
+];
 
 const Cards = () => {
     const [active, setActive] = useState(0);
+    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+    const ref = useRef();
+
+    const updateCurrentSlideIndex = e => {
+        const contentOffsetX = e.nativeEvent.contentOffset.x;
+        const currentIndex = Math.round(contentOffsetX / width);
+        setCurrentSlideIndex(currentIndex);
+    };
 
     const handleClick = (id) => {
         setActive(id)
-        console.log(id)
     };
 
     const ListHeader = () => (
@@ -69,47 +98,57 @@ const Cards = () => {
                 }}
             >
                 <TouchableOpacity style={{ marginRight: 20 }}>
-                    <SvgIcon name='plus' />
+                    <SvgIcon name='plus' onPress={() => console.log('first')} />
                 </TouchableOpacity>
 
-                <ImageBackground
-                    source={CardBackground}
-                    style={{
-                        height: 154,
-                        width: 240,
-                        backgroundColor: "#3CBAF0",
-                        borderRadius: 20,
-                        padding: 20
-                    }}
-                >
-                    <View
+                <FlatList
+                    ref={ref}
+                    onMomentumScrollEnd={updateCurrentSlideIndex}
+                    showsHorizontalScrollIndicator={false}
+                    horizontal
+                    data={slides}
+                    pagingEnabled
+                    renderItem={({ item }) => (<ImageBackground
+                        source={CardBackground}
                         style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
+                            height: 154,
+                            width: 240,
+                            backgroundColor: item.color,
+                            borderRadius: 20,
+                            padding: 20,
+                            marginRight: 40
                         }}
                     >
-                        <NormalText caption="Debit Card" style={{ color: palette.white, fontSize: 12 }} />
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <NormalText caption="Debit Card" style={{ color: palette.white, fontSize: 12 }} />
 
-                        <NormalText caption="**** 0610" style={{ color: palette.white, fontSize: 12 }} />
-                    </View>
-                    <Spacer space="xxl" />
+                            <NormalText caption="**** 0610" style={{ color: palette.white, fontSize: 12 }} />
+                        </View>
+                        <Spacer space="xxl" />
 
-                    <NormalText caption="Balance" style={{ color: palette.white, fontSize: 8 }} />
-                    <Spacer space="sm" />
+                        <NormalText caption="Balance" style={{ color: palette.white, fontSize: 8 }} />
+                        <Spacer space="sm" />
 
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <NormalText caption="7,658" style={{ color: palette.white, fontSize: 30 }} />
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <NormalText caption="7,658" style={{ color: palette.white, fontSize: 30 }} />
 
-                        <SvgIcon name='visa' />
-                    </View>
-                </ImageBackground>
+                            <SvgIcon name='visa' />
+                        </View>
+                    </ImageBackground>
+                    )}
+                />
             </View>
             <Spacer space="md" />
 
@@ -197,7 +236,7 @@ const Cards = () => {
             </View>
         </View>
 
-    )
+    );
 
     return (
         <View style={styles.maincontainer}>
@@ -206,7 +245,8 @@ const Cards = () => {
                     data={transactions}
                     keyExtractor={(item, itemIndex) => itemIndex}
                     ListHeaderComponent={<ListHeader />}
-                    renderItem={({item}) => (
+                    contentContainerStyle={{ paddingBottom: 100 }}
+                    renderItem={({ item }) => (
                         <TransactionsList
                             amount={item.amount}
                             title={item.title}

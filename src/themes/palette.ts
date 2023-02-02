@@ -4,7 +4,7 @@ export const palette = {
     borderColor: '#E2E3E4',
     cardText: '#6079BF',
     danger: '#DC2727',
-    darkGrey: "#222222",
+    tabIndicator: "rgba(56, 115, 221, 0.1)",
     deepBlue: "#0160BC",
     high: "#FB8181",
     inactive: "#F4F5F7",
